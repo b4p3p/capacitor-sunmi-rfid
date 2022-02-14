@@ -9,6 +9,12 @@ export class SunmiRFIDWeb extends WebPlugin implements SunmiRFIDPlugin {
    async disconnect(): Promise<{ status: string; data: string }> {
       return Promise.reject("Piattaforma non supportata");
    }
+   async start(): Promise<{ status: string; data: string; }> {
+      return Promise.reject("Piattaforma non supportata");
+   }
+   async stop(): Promise<{ status: string; data: string; }> {
+      return Promise.reject("Piattaforma non supportata");
+   }
    async getScanModel(): Promise<{ status: string; data: string; }> {
       return Promise.reject("Piattaforma non supportata");
    }

@@ -15,10 +15,13 @@ npx cap sync
 
 * [`connect()`](#connect)
 * [`disconnect()`](#disconnect)
+* [`start()`](#start)
+* [`stop()`](#stop)
 * [`getScanModel()`](#getscanmodel)
 * [`getInfo(...)`](#getinfo)
 * [`getBatteryRemainingPercent(...)`](#getbatteryremainingpercent)
 * [`onReadTag(...)`](#onreadtag)
+* [`setTemporaryOutputPower(...)`](#settemporaryoutputpower)
 * [Type Aliases](#type-aliases)
 
 </docgen-index>
@@ -41,6 +44,28 @@ connect() => Promise<{ status: string; data: string; }>
 
 ```typescript
 disconnect() => Promise<{ status: string; data: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ status: string; data: string; }&gt;</code>
+
+--------------------
+
+
+### start()
+
+```typescript
+start() => Promise<{ status: string; data: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ status: string; data: string; }&gt;</code>
+
+--------------------
+
+
+### stop()
+
+```typescript
+stop() => Promise<{ status: string; data: string; }>
 ```
 
 **Returns:** <code>Promise&lt;{ status: string; data: string; }&gt;</code>
@@ -100,6 +125,21 @@ onReadTag(callback: any) => Promise<number>
 | **`callback`** | <code>any</code> |
 
 **Returns:** <code>Promise&lt;number&gt;</code>
+
+--------------------
+
+
+### setTemporaryOutputPower(...)
+
+```typescript
+setTemporaryOutputPower(args: { power?: number; }) => Promise<{ status: string; data: string; }>
+```
+
+| Param      | Type                             |
+| ---------- | -------------------------------- |
+| **`args`** | <code>{ power?: number; }</code> |
+
+**Returns:** <code>Promise&lt;{ status: string; data: string; }&gt;</code>
 
 --------------------
 

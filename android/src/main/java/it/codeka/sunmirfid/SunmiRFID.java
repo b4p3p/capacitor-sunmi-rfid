@@ -14,6 +14,8 @@ public class SunmiRFID {
    public PluginCall callInfo = null;
    public PluginCall callOnReadTag = null;
    SunmiRFIDPlugin plugin;
+   Boolean inRun = false;
+   Boolean inScan = false;
 
    public SunmiRFID(SunmiRFIDPlugin plugin){
       this.plugin = plugin;

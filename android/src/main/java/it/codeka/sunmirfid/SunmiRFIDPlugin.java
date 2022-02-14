@@ -20,7 +20,6 @@ public class SunmiRFIDPlugin extends Plugin {
    private RFIDReaderCall readerCall;
    private SunmiBroadcastReceiver appReceiver;
    SunmiRFID impl = new SunmiRFID(this);
-   Boolean inRun = false;
 
    @Override
    public void load() {
@@ -29,6 +28,8 @@ public class SunmiRFIDPlugin extends Plugin {
       RFIDManager.getInstance().setPrintLog(true);
       RFIDManager.getInstance().connect(getActivity());
    }
+
+   // region CONNETCT/DISCONNECT
 
    @PluginMethod
    public void connect(PluginCall call) {
@@ -54,6 +55,30 @@ public class SunmiRFIDPlugin extends Plugin {
       call.resolve(ret);
    }
 
+   // endregion CONNETCT/DISCONNECT
+
+   // region START/STOP
+
+   @PluginMethod
+   public void start(PluginCall call) {
+      this.impl.inScan = true;
+      JSObject ret = new JSObject();
+      ret.put("data", "started");
+      ret.put("status", "ok");
+      call.resolve(ret);
+   }
+
+   @PluginMethod
+   public void stop(PluginCall call) {
+      this.impl.inScan = false;
+      JSObject ret = new JSObject();
+      ret.put("data", "started");
+      ret.put("status", "ok");
+      call.resolve(ret);
+   }
+
+   // endregion START/STOP
+
    @PluginMethod
    public void getScanModel(PluginCall call) {
       JSObject ret = new JSObject();
@@ -63,6 +88,28 @@ public class SunmiRFIDPlugin extends Plugin {
          ret.put("data", scanModel);
       } catch (RemoteException e) {
          e.printStackTrace();
+         ret.put("status", "ko");
+         ret.put("data", e.getMessage());
+      }
+      call.resolve(ret);
+   }
+
+   @PluginMethod
+   public void setTemporaryOutputPower(PluginCall call) {
+      JSObject ret = new JSObject();
+      try{
+         int power = call.getData().getInt("power");
+         if(power > 0){
+            if(power > 33) power = 33;
+            if(power < 25) power = 25;
+            this.helper.setTemporaryOutputPower((byte)power);
+            ret.put("status", "ok");
+            ret.put("data", String.valueOf(power));
+         }else{
+            ret.put("status", "ko");
+            ret.put("data", "power is undefined");
+         }
+      }catch (Exception e){
          ret.put("status", "ko");
          ret.put("data", e.getMessage());
       }
@@ -116,13 +163,17 @@ public class SunmiRFIDPlugin extends Plugin {
       this.impl.callOnReadTag = call;
    }
 
+
+
    public void dispatchKeyEvent(KeyEvent event) {
       int action = event.getAction();
       int keycode = event.getKeyCode();
 
-      if(action == KeyEvent.ACTION_DOWN && keycode == 288 && !this.inRun){
+      if(!this.impl.inScan) return;
+
+      if(action == KeyEvent.ACTION_DOWN && keycode == 288 && !this.impl.inRun){
          Log.i(TAG, "START INVENTORY");
-         this.inRun = true;
+         this.impl.inRun = true;
 
          // this.helper.inventory((byte)255); - no buono
          // this.helper.realTimeInventory((byte)3);   - good!
@@ -134,7 +185,7 @@ public class SunmiRFIDPlugin extends Plugin {
       if(action == KeyEvent.ACTION_UP && keycode == 288){
          Log.i(TAG, "STOP INVENTORY");
          // this.helper.getAndResetInventoryBuffer();
-         this.inRun = false;
+         this.impl.inRun = false;
       }
    }
 }

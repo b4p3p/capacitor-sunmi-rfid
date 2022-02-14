@@ -53,7 +53,8 @@ public class RFIDReaderCall extends ReaderCall {
          // OPERAZIONI
          case CMD.REAL_TIME_INVENTORY:
          case CMD.ISO18000_6B_INVENTORY:
-            this.plugin.inRun = false;
+            this.impl.inRun = false; // continue scan
+
             Log.w(TAG, "[onsuccess] " + cmdToString(cmd));
             break;
          case CMD.INVENTORY:
