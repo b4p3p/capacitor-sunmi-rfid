@@ -33,17 +33,27 @@ public class SunmiRFIDPlugin extends Plugin {
 
    @PluginMethod
    public void connect(PluginCall call) {
-      this.helper = RFIDManager.getInstance().getHelper();
+      try{
+         this.helper = RFIDManager.getInstance().getHelper();
 
-      this.readerCall = new RFIDReaderCall(this);
-      this.helper.registerReaderCall(this.readerCall);
+         this.readerCall = new RFIDReaderCall(this);
+         this.helper.registerReaderCall(this.readerCall);
 
-      this.appReceiver = new SunmiBroadcastReceiver(this, getContext());
+         this.appReceiver = new SunmiBroadcastReceiver(this, getContext());
 
-      JSObject ret = new JSObject();
-      ret.put("data", "connected");
-      ret.put("status", "ok");
-      call.resolve(ret);
+         JSObject ret = new JSObject();
+         ret.put("data", "connected");
+         ret.put("status", "ok");
+         call.resolve(ret);
+
+      }catch (Exception e){
+         Log.e(TAG, "connect");
+         JSObject ret = new JSObject();
+         ret.put("data", e.getMessage());
+         ret.put("status", "ko");
+         call.reject(e.getMessage());
+      }
+
    }
 
    @PluginMethod
@@ -143,15 +153,19 @@ public class SunmiRFIDPlugin extends Plugin {
 
    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
    public void getBatteryRemainingPercent(PluginCall call) {
-      this.helper.unregisterReaderCall();
-      this.readerCall = new RFIDReaderCall(this);
-      this.helper.registerReaderCall(this.readerCall);
-      call.setKeepAlive(true);
-      if(this.impl.callInfo != null){
-         this.impl.callInfo.release(getBridge());
+      try {
+         this.helper.unregisterReaderCall();
+         this.readerCall = new RFIDReaderCall(this);
+         this.helper.registerReaderCall(this.readerCall);
+         call.setKeepAlive(true);
+         if(this.impl.callInfo != null){
+            this.impl.callInfo.release(getBridge());
+         }
+         this.impl.callInfo = call;
+         this.helper.getBatteryRemainingPercent();
+      }catch (Exception e){
+         e.printStackTrace();
       }
-      this.impl.callInfo = call;
-      this.helper.getBatteryRemainingPercent();
    }
 
    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
