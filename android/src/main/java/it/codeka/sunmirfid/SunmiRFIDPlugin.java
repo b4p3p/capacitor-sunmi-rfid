@@ -25,7 +25,7 @@ public class SunmiRFIDPlugin extends Plugin {
    public void load() {
       Log.i(TAG, "load");
       SunmiRFIDPlugin.instance = this;
-      RFIDManager.getInstance().setPrintLog(true);
+      RFIDManager.getInstance().setPrintLog(false);
       RFIDManager.getInstance().connect(getActivity());
    }
 

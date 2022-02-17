@@ -55,6 +55,7 @@ dependencies {
    testImplementation "junit:junit:$junitVersion"
    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+   implementation "com.sunmi:rfidlibrary:1.1.2"
 }
 
-//implementation "com.sunmi:rfidlibrary:1.1.2"
+//
