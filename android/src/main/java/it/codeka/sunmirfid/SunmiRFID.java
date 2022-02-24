@@ -77,6 +77,10 @@ public class SunmiRFID {
 //         ris.put("ant_id", tag.getInt(ParamCts.ANT_ID, (byte) 0));
       }
 
+      if(epc.equals("")){
+         return;
+      }
+
       JSObject risData = new JSObject();
       risData.put("value", ris);
       risData.put("key", "on_tag");
